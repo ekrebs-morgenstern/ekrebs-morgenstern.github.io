@@ -25,10 +25,10 @@
 
 #       - uses: actions/upload-pages-artifact@v3
 #         with:
-#           path: docs/'mon CV'
+#           path: 'docs/mon CV'
 
 #       - uses: actions/deploy-pages@v4
-
+#### this trace is kept to be examined later
 
 #####################
 # Proposed fix
@@ -68,10 +68,15 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Verify Pages directory
+        run: |
+          test -d "docs/mon CV"
+          find "docs/mon CV" -maxdepth 2 -type f | head
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/'mon CV'
+          path: 'docs/mon CV'
 
   deploy:
     environment:
