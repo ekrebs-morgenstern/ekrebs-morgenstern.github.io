@@ -1,3 +1,4 @@
 [submodule "docs"]
 	path = docs
-	url = git@github.com:ekrebs-morgenstern/CV.git
+	url = https://github.com/ekrebs-morgenstern/CV.git
+
