@@ -33,13 +33,20 @@
 #####################
 # Proposed fix
 #####################
-name: Deploy GitHub Pages
+name: Deployment
 
 on:
   push:
     branches:
       - main
+
+  # Allow manual execution from the Actions tab
   workflow_dispatch:
+
+  # cron: minutes, hour, day of the month, month, day of the week  (UTC)
+  # every day at 6:00 UTC
+  #schedule:
+  #  - cron: "0 6 * * *" 
 
 permissions:
   contents: read
@@ -51,12 +58,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout site in private submodule
-        uses: actions/checkout@v4
+      - name: Checkout private submodule
+        uses: actions/checkout@v6
         with:
           submodules: recursive
           token: ${{ secrets.SUBMODULE_TOKEN }}
           persist-credentials: true
+
+      - name: Update submodule
+        run: |
+          git submodule update --init --remote --merge
 
       # Add your site build steps here.
       # For Jekyll, for example:
@@ -68,22 +79,23 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Verify Pages directory
-        run: |
-          test -d "docs/mon CV"
-          find "docs/mon CV" -maxdepth 2 -type f | head
+      # - name: Verify Pages directory
+      #   run: |
+      #     test -d "docs/mon CV"
+      #     find "docs/mon CV" -maxdepth 2 -type f | head
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: "docs/mon CV"
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Deploy to GitHub Pages
