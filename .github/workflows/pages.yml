@@ -67,7 +67,8 @@ jobs:
 
       - name: Update submodule
         run: |
-          git submodule update --init --remote --merge
+          git submodule sync --recursive
+          git submodule update --init --remote --chekout
 
       # Add your site build steps here.
       # For Jekyll, for example:
