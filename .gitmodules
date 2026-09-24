@@ -1,4 +1,4 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/ekrebs-morgenstern/CV.git
-
+  branch = main
